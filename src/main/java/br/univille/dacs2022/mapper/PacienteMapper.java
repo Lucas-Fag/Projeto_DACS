@@ -11,5 +11,8 @@ import br.univille.dacs2022.entity.Paciente;
 public interface PacienteMapper {
     List<PacienteDTO> mapListPaciente(List<Paciente> paciente);
     List<Paciente> mapListPacienteDTO(List<PacienteDTO> paciente);
+
+    PacienteDTO mapPaciente(Paciente paciente);
+    Paciente mapPacienteDTO(PacienteDTO paciente);
 }
  

@@ -17,7 +17,7 @@
                         <th>NOME</th>
                         <th>SEXO</th>
                         <th>DATA NASCIMENTO</th>
-                        <th></th>
+                        <th>ALTERAR/EXCLUIR</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,7 +26,12 @@
                         <td th:text="${paciente.nome}"></td>
                         <td th:text="${paciente.sexo}"></td>
                         <td th:text="${paciente.dataNascimento}"></td>
-                        <td></td>
+                        <td>
+                            <a class="btn btn-primary" th:href="@{'/paciente/alterar/'+${paciente.id}}">Alterar</a>
+                            
+                            <button class="btn btn-danger js-delete" 
+                                    th:data-id="${paciente.id}" >Excluir</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
