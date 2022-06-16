@@ -1,56 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-      
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    
     <head th:include="layout :: htmlhead"></head>
 
     <body>
         <nav th:replace="layout :: menu">(menu)</nav>
 
         <div class="container">
-            <h1 class="text-center">Paciente</h1>
-            <a class="btn btn-primary" th:href="@{/paciente/novo}">Novo</a>
-            <table class="table table table-dark table-striped table-hover" id="pacientes">
+
+            <h1 class="text-center">Procedimentos</h1>
+            <a class="btn btn-primary" th:href="@{/procedimento/novo}">Novo</a>
+            <table class="table table table-dark table-striped table-hover" id="procedimentos">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>NOME</th>
-                        <th>SEXO</th>
-                        <th>DATA NASCIMENTO</th>
+                        <th>DESCRIÇÃO</th>
                         <th>ALTERAR/EXCLUIR</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="paciente : ${listaPacientes}">
-                        <td th:text="${paciente.id}"></td>
-                        <td th:text="${paciente.nome}"></td>
-                        <td th:text="${paciente.sexo}"></td>
-                        <td th:text="${paciente.dataNascimento}"></td>
+                    <tr th:each="procedimento : ${listaProcedimentos}">
+                        <td th:text="${procedimento.id}"></td>
+                        <td th:text="${procedimento.descricao}"></td>
                         <td>
-                            <a class="btn btn-primary" th:href="@{'/paciente/alterar/'+${paciente.id}}">Alterar</a>
+                            <a class="btn btn-primary" th:href="@{'/procedimento/alterar/'+${procedimento.id}}">Alterar</a>
                             
                             <button class="btn btn-danger js-delete" 
-                                    th:data-id="${paciente.id}" >Excluir</button>
+                                    th:data-id="${procedimento.id}" >Excluir</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            
+    
         </div>
         
         <div th:include="layout :: footer">(footer)</div>
-    
+
         <script type="text/javascript">
             $(document).ready(function() {
-                $("#pacientes").on('click', '.js-delete', function() {
+                $("#procedimentos").on('click', '.js-delete', function() {
                     let button = $(this);
                     bootbox.confirm("Confirma a exclusão do registro?", function(result) {
                         if (result) {
                             $.ajax({
-                                url: '/paciente/delete/' + button.attr("data-id"),
+                                url: '/procedimento/delete/' + button.attr("data-id"),
                                 method: 'GET',
                                 success : function() {
-                                    window.location.href = '/paciente/';
+                                    window.location.href = '/procedimento/';
                                 }
                             });
                         }
@@ -58,6 +55,5 @@
                 });
             });
         </script>
-
     </body>
 </html>

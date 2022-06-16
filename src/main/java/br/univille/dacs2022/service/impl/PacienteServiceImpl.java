@@ -14,8 +14,7 @@ import br.univille.dacs2022.repository.PacienteRepository;
 import br.univille.dacs2022.service.PacienteService;
 
 @Service
-public class PacienteServiceImpl 
-    implements PacienteService{
+public class PacienteServiceImpl implements PacienteService{
     @Autowired
     private PacienteRepository repository;
     private PacienteMapper mapper = Mappers.getMapper(PacienteMapper.class);
