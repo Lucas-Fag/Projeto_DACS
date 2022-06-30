@@ -1,5 +1,10 @@
 package br.univille.dacs2022.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.univille.dacs2022.entity.Procedimento;
+
 public class MedicoDTO {
     private long id;
     private String nome;
@@ -30,8 +35,6 @@ public class MedicoDTO {
     }
     public void setCRM(String cRM) {
         CRM = cRM;
-    }
-
-    
+    }   
 
 }

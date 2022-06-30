@@ -1,5 +1,6 @@
 package br.univille.dacs2022.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.univille.dacs2022.dto.CidadeDTO;
 import br.univille.dacs2022.dto.PacienteDTO;
+import br.univille.dacs2022.service.CidadeService;
 import br.univille.dacs2022.service.PacienteService;
 
 @Controller
 @RequestMapping("/paciente")
 public class PacienteController {
-
     @Autowired
     private PacienteService service;
+    @Autowired
+    private CidadeService cidadeService;
 
     @GetMapping
     public ModelAndView index(){
@@ -33,7 +37,13 @@ public class PacienteController {
     @GetMapping("/novo")
     public ModelAndView novo() {
         var paciente = new PacienteDTO();
-        return new ModelAndView("paciente/form", "paciente", paciente);
+        var listaCidades = cidadeService.getAll();
+        HashMap<String, Object> dados = new HashMap<>();
+
+        dados.put("paciente", paciente);
+        dados.put("listaCidades", listaCidades);
+
+        return new ModelAndView("paciente/form", dados);
     }
 
     @PostMapping(params="form")
@@ -45,7 +55,13 @@ public class PacienteController {
     @GetMapping(path = "/alterar/{id}")
     public ModelAndView alterar(@PathVariable("id") long id) {
         PacienteDTO paciente = service.findById(id);
-        return new ModelAndView("paciente/form", "paciente", paciente);
+        List<CidadeDTO> listaCidades = cidadeService.getAll();
+        HashMap<String, Object> dados = new HashMap<>();
+
+        dados.put("paciente", paciente);
+        dados.put("listaCidades", listaCidades);
+
+        return new ModelAndView("paciente/form", dados);
     }
 
     @GetMapping(path = "/delete/{id}")
