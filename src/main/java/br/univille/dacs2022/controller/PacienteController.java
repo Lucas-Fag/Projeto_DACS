@@ -3,9 +3,13 @@ package br.univille.dacs2022.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,9 +51,16 @@ public class PacienteController {
     }
 
     @PostMapping(params="form")
-    public ModelAndView save(PacienteDTO paciente) {
+    public ModelAndView save(@Valid @ModelAttribute("paciente") PacienteDTO paciente, BindingResult BindingResult) {
         CidadeDTO cidadeDTO = cidadeService.findById(paciente.getCidadeId());
         paciente.setCidade(cidadeDTO);
+        if (BindingResult.hasErrors()) {
+            var listaCidades = cidadeService.getAll();
+            HashMap<String, Object> dados = new HashMap<>();
+            dados.put("listaCidades", listaCidades);
+            
+            return new ModelAndView("paciente/form", dados);
+        }
         service.save(paciente);
         return new ModelAndView("redirect:/paciente");
     }
