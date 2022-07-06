@@ -42,8 +42,8 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-12">
-                        <label for="cidade" th:field="*{cidade}">Cidade:</label>
-                        <select id="cidade" class="form-select">
+                        <label for="cidade">Cidade:</label>
+                        <select id="cidade" th:field="*{cidadeId}" class="form-select">
                             <option th:each="umaCidade : ${listaCidades}"
                                     th:value="${umaCidade.id}"
                                     th:text="${umaCidade.nome}">

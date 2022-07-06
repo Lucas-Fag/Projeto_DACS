@@ -48,6 +48,8 @@ public class PacienteController {
 
     @PostMapping(params="form")
     public ModelAndView save(PacienteDTO paciente) {
+        CidadeDTO cidadeDTO = cidadeService.findById(paciente.getCidadeId());
+        paciente.setCidade(cidadeDTO);
         service.save(paciente);
         return new ModelAndView("redirect:/paciente");
     }
