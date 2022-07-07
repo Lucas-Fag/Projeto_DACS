@@ -1,6 +1,8 @@
 package br.univille.dacs2022.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -8,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.ManyToOne;
@@ -25,7 +28,16 @@ public class Paciente {
     private Date dataNascimento;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private Cidade cidade;
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    private List<PlanoDeSaude> listaPlanos = new ArrayList<>();
 
+    
+    public List<PlanoDeSaude> getListaPlanos() {
+        return listaPlanos;
+    }
+    public void setListaPlanos(List<PlanoDeSaude> listaPlanos) {
+        this.listaPlanos = listaPlanos;
+    }
     public Cidade getCidade() {
         return cidade;
     }

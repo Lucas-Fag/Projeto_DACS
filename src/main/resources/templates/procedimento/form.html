@@ -17,6 +17,9 @@
                     <div class="col-12">
                         <label for="txtDesc" >Descrição: </label>
                         <input class="form-control" id="txtDesc" type="text" th:field="*{descricao}">
+                        <p th:if="${#fields.hasErrors('descricao')}"
+                        th:errors="*{descricao}"
+                        class="alert alert-danger"/>
                     </div>
                 </div>
             </div>

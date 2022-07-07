@@ -27,7 +27,7 @@
                         <td th:text="${paciente.nome}"></td>
                         <td th:text="${paciente.sexo}"></td>
                         <td th:text="${paciente.dataNascimento}"></td>
-                        <td th:text="${paciente.cidade}"></td>
+                        <td th:text="${paciente.cidade?.nome}"></td>
                         <td>
                             <a class="btn btn-primary" th:href="@{'/paciente/alterar/'+${paciente.id}}">Alterar</a>
                             

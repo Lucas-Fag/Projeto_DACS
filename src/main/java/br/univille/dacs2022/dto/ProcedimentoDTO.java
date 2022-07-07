@@ -1,7 +1,12 @@
 package br.univille.dacs2022.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class ProcedimentoDTO {
     private long id;
+    @NotBlank(message = "O campo Descrição não pode ser deixado em branco.")
+    @NotNull
     private String descricao;
     
     public long getId() {

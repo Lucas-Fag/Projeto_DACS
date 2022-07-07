@@ -2,9 +2,13 @@ package br.univille.dacs2022.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +38,10 @@ public class ProcedimentoController {
     }
 
     @PostMapping(params = "form")
-    public ModelAndView save(ProcedimentoDTO procedimento) {
+    public ModelAndView save(@Valid @ModelAttribute("procedimento") ProcedimentoDTO procedimento, BindingResult BindingResult) {
+        if(BindingResult.hasErrors()){
+            return new ModelAndView("procedimento/form");
+        }
         service.save(procedimento);
         return new ModelAndView("redirect:/procedimento");
     }
