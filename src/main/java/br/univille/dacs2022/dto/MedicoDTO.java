@@ -8,8 +8,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import br.univille.dacs2022.entity.Procedimento;
-
 public class MedicoDTO {
     private long id;
     @NotBlank(message = "O campo nome não pode ser deixado em branco.")
@@ -20,12 +18,19 @@ public class MedicoDTO {
     @Min(value = 1, message = "O valor do CRM deve ser maior que 1.")
     @Max(value = 9999, message = "O valor do CRM deve ser menor que 9999.")
     private String CRM;
-    private List<Procedimento> listaProcedimentos = new ArrayList<>();
+    private List<ProcedimentoDTO> listaProcedimentos = new ArrayList<>();
+    private long procedimentoId;
 
-    public List<Procedimento> getListaProcedimentos() {
+    public long getProcedimentoId() {
+        return procedimentoId;
+    }
+    public void setProcedimentoId(long procedimentoId) {
+        this.procedimentoId = procedimentoId;
+    }
+    public List<ProcedimentoDTO> getListaProcedimentos() {
         return listaProcedimentos;
     }
-    public void setListaProcedimentos(List<Procedimento> listaProcedimentos) {
+    public void setListaProcedimentos(List<ProcedimentoDTO> listaProcedimentos) {
         this.listaProcedimentos = listaProcedimentos;
     }
     public long getId() {

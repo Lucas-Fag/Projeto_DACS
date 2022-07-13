@@ -21,5 +21,10 @@ public class ProcedimentoDTO {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.id == ((ProcedimentoDTO) obj).getId();
+    }
     
 }

@@ -16,7 +16,6 @@
                         <th>ID</th>
                         <th>NOME</th>
                         <th>CRM</th>
-                        <th>PROCEDIMENTOS</th>
                         <th>ALTERAR/EXCLUIR</th>
                     </tr>
                 </thead>
@@ -25,7 +24,6 @@
                         <td th:text="${medico.id}"></td>
                         <td th:text="${medico.nome}"></td>
                         <td th:text="${medico.CRM}"></td>
-                        <td>TO DO</td>
                         <td>
                             <a class="btn btn-primary" th:href="@{'/medico/alterar/'+${medico.id}}">Alterar</a>
                             
