@@ -30,5 +30,26 @@ public class PlanoDeSaudeImpl implements PlanoDeSaudeService {
         Optional<PlanoDeSaude> planoEntity = repository.findById(id);
         return mapper.mapPlanoDeSaude(planoEntity.get());
     }
+
+    @Override
+    public PlanoDeSaudeDTO save(PlanoDeSaudeDTO plano) {
+        PlanoDeSaude planoEntity = mapper.mapPlanoDeSaudeDTO(plano);
+        planoEntity = repository.save(planoEntity);
+        
+        return mapper.mapPlanoDeSaude(planoEntity);
+    }
+
+    @Override
+    public PlanoDeSaudeDTO delete(long id) {
+        Optional<PlanoDeSaude> planoEntity = repository.findById(id);
+
+        if (planoEntity.isPresent()) {
+            PlanoDeSaude plano = planoEntity.get();
+            repository.delete(plano);
+            return mapper.mapPlanoDeSaude(plano);
+        }
+
+        return new PlanoDeSaudeDTO();
+    }
     
 }
