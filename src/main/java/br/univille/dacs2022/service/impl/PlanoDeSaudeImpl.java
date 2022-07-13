@@ -28,7 +28,12 @@ public class PlanoDeSaudeImpl implements PlanoDeSaudeService {
     @Override
     public PlanoDeSaudeDTO getById(long id) {
         Optional<PlanoDeSaude> planoEntity = repository.findById(id);
-        return mapper.mapPlanoDeSaude(planoEntity.get());
+
+        if (planoEntity.isPresent()) {
+            return mapper.mapPlanoDeSaude(planoEntity.get());
+        }
+
+        return new PlanoDeSaudeDTO();
     }
 
     @Override
