@@ -1,0 +1,41 @@
+GET http://localhost:8081/api/v1/pacientes
+
+###
+POST http://localhost:8081/api/v1/pacientes
+Content-Type: application/json
+
+{
+    "nome": "Zezinho",
+    "sexo": "Masculino",
+    "dataNascimento": "2022-08-17T00:00:00"
+}
+
+###
+POST http://localhost:8081/api/v1/pacientes
+Content-Type: application/json
+
+{
+    "id":33,
+    "nome": "Mariazinha",
+    "sexo": "Feminino",
+    "dataNascimento": "2022-08-16T00:00:00"
+}
+
+###
+GET http://localhost:8081/api/v1/pacientes/nome/ze
+
+### 
+GET http://localhost:8081/api/v1/pacientes/busca?nome=ze
+
+###
+PUT http://localhost:8081/api/v1/pacientes/1
+Content-Type: application/json
+
+{
+    "nome": "Zezinho da Silva Sauro",
+    "sexo": "Masculino",
+    "dataNascimento": "2022-08-17T00:00:00"
+}
+
+###
+DELETE http://localhost:8081/api/v1/pacientes/3
