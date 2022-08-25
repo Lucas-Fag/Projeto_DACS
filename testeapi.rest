@@ -15,7 +15,6 @@ POST http://localhost:8081/api/v1/pacientes
 Content-Type: application/json
 
 {
-    "id":33,
     "nome": "Mariazinha",
     "sexo": "Feminino",
     "dataNascimento": "2022-08-16T00:00:00"
@@ -39,3 +38,6 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8081/api/v1/pacientes/3
+
+###
+GET http://localhost:8081/api/v1/pacientes/1

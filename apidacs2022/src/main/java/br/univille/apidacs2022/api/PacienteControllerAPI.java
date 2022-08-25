@@ -30,6 +30,13 @@ public class PacienteControllerAPI {
         return new ResponseEntity<List<Paciente>>(listaPacientes, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Paciente> getById(@PathVariable("id") long id) {
+        Paciente paciente = service.findById(id);
+
+        return new ResponseEntity<Paciente>(paciente, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Paciente> insertPaciente(@RequestBody Paciente paciente) {
         if (paciente.getId() == 0) {
