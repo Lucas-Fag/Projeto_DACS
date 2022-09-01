@@ -41,3 +41,33 @@ DELETE http://localhost:8081/api/v1/pacientes/3
 
 ###
 GET http://localhost:8081/api/v1/pacientes/1
+
+###
+GET http://localhost:8081/api/v1/medicos
+
+###
+POST http://localhost:8081/api/v1/medicos
+Content-Type: application/json
+
+{
+    "nome":"Lucas Fagundes",
+    "CRM":"12345"
+}
+
+###
+GET http://localhost:8081/api/v1/medicos/1
+
+###
+GET http://localhost:8081/api/v1/medicos/nome/Lusc
+
+###
+PUT http://localhost:8081/api/v1/medicos/1
+Content-Type: application/json
+
+{
+    "nome":"Luscas Fagundes",
+    "crm":"123"
+}
+
+###
+DELETE http://localhost:8081/api/v1/medicos/1

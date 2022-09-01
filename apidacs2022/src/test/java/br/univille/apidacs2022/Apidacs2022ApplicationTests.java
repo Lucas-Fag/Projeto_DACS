@@ -1,12 +1,12 @@
 package br.univille.apidacs2022;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+// import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -53,6 +53,23 @@ class Apidacs2022ApplicationTests {
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.nome", is("Zezinho")))
 		.andExpect(jsonPath("$.sexo", is("Masculino")));
+	}
+
+	@Test
+	void medicoControllerAPIPOSTGETTest() throws Exception {
+		MvcResult result = 
+		mockMvc.perform(post("/api/v1/medicos")
+		.content("{\"nome\":\"Lucas\",\"crm\":\"123\"}")
+		.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated()).andReturn();
+
+		String resultStr = result.getResponse().getContentAsString();
+		JSONObject objJson = new JSONObject(resultStr);
+
+		mockMvc.perform(get("/api/v1/medicos/" + objJson.getString("id")))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.nome", is("Lucas")))
+		.andExpect(jsonPath("$.crm", is("123")));
 	}
 
 }

@@ -54,13 +54,6 @@ public class PacienteControllerAPI {
         return new ResponseEntity<List<Paciente>>(listaPaciente, HttpStatus.OK);
     }
 
-    // @GetMapping
-    // public ResponseEntity<List<Paciente>> getBynome2(@RequestParam("nome") String nome) {
-    //     List<Paciente> listaPaciente = service.getByName(nome);
-
-    //     return new ResponseEntity<List<Paciente>>(listaPaciente, HttpStatus.OK);
-    // }
-
     @PutMapping("/{id}")
     public ResponseEntity<Paciente> update(@PathVariable("id") long id, @RequestBody Paciente paciente) {
         Paciente pacienteAntigo = service.findById(id);
