@@ -89,4 +89,21 @@ class Apidacs2022ApplicationTests {
 		
 	}
 
+	@Test
+	void cidadeAPIPOSTGETTest() throws Exception {
+		MvcResult result = 
+		mockMvc.perform(post("/api/v1/cidades")
+		.content("{\"nome\":\"Joinville\"}")
+		.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated()).andReturn();
+
+		String resultStr = result.getResponse().getContentAsString();
+		JSONObject objJson = new JSONObject(resultStr);
+
+		mockMvc.perform(get("/api/v1/cidades/" + objJson.getString("id")))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.nome", is("Joinville")));
+		
+	}
+
 }
