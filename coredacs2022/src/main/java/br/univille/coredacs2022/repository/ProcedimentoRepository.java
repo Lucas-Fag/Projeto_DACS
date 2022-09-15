@@ -10,6 +10,6 @@ import br.univille.coredacs2022.entity.Procedimento;
 
 @Repository
 public interface ProcedimentoRepository extends JpaRepository<Procedimento, Long> {
-    
-    List<Procedimento> findByDescricaoIgnoreCaseContaining(@Param("Descricao") String Descricao);
+
+    List<Procedimento> findByDescricaoIgnoreCaseContaining(@Param("descricao") String Descricao);
 }
