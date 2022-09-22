@@ -1,8 +1,23 @@
+# @name loginAPI
+POST http://localhost:8081/api/v1/auth/signin
+Content-Type: application/json
+
+{
+    "usuario":"admin",
+    "senha":"admin"
+}
+
+###
+@token = {{loginAPI.response.body.*}}
+
+###
 GET http://localhost:8081/api/v1/pacientes
+Authorization: Bearer {{token}}
 
 ###
 POST http://localhost:8081/api/v1/pacientes
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "nome": "Zezinho",
@@ -13,6 +28,7 @@ Content-Type: application/json
 ###
 POST http://localhost:8081/api/v1/pacientes
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "nome": "Mariazinha",
@@ -22,13 +38,16 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8081/api/v1/pacientes/nome/ze
+Authorization: Bearer {{token}}
 
 ### 
 GET http://localhost:8081/api/v1/pacientes/busca?nome=ze
+Authorization: Bearer {{token}}
 
 ###
 PUT http://localhost:8081/api/v1/pacientes/1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "nome": "Zezinho da Silva Sauro",
@@ -38,16 +57,20 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8081/api/v1/pacientes/3
+Authorization: Bearer {{token}}
 
 ###
 GET http://localhost:8081/api/v1/pacientes/1
+Authorization: Bearer {{token}}
 
 ###
 GET http://localhost:8081/api/v1/medicos
+Authorization: Bearer {{token}}
 
 ###
 POST http://localhost:8081/api/v1/medicos
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "nome":"Lucas Fagundes",
@@ -56,13 +79,16 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8081/api/v1/medicos/1
+Authorization: Bearer {{token}}
 
 ###
 GET http://localhost:8081/api/v1/medicos/nome/Lusc
+Authorization: Bearer {{token}}
 
 ###
 PUT http://localhost:8081/api/v1/medicos/1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "nome":"Luscas Fagundes",
@@ -71,12 +97,4 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8081/api/v1/medicos/1
-
-###
-POST http://localhost:8081/api/v1/auth/signin
-Content-Type: application/json
-
-{
-    "usuario":"admin",
-    "senha":"admin"
-}
+Authorization: Bearer {{token}}

@@ -39,54 +39,75 @@ class Apidacs2022ApplicationTests {
 
 	@Test
 	void pacienteControllerAPIPOSTGETTest() throws Exception {
-		MvcResult result = 
-		mockMvc.perform(post("/api/v1/pacientes")
-		.content("{\"nome\":\"Zezinho\",\"sexo\":\"Masculino\"}")
-		.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(status().isCreated()).andReturn();
+		String jwtToken = getToken();
+
+		MvcResult result = mockMvc.perform(post("/api/v1/pacientes")
+				.content("{\"nome\":\"Zezinho\",\"sexo\":\"Masculino\"}")
+				.header("Authorization", "Bearer " + jwtToken)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated()).andReturn();
 
 		String resultStr = result.getResponse().getContentAsString();
 
 		JSONObject objJson = new JSONObject(resultStr);
 
-		mockMvc.perform(get("/api/v1/pacientes/" + objJson.getString("id")))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.nome", is("Zezinho")))
-		.andExpect(jsonPath("$.sexo", is("Masculino")));
+		mockMvc.perform(get("/api/v1/pacientes/" + objJson.getString("id"))
+				.header("Authorization", "Bearer " + jwtToken))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.nome", is("Zezinho")))
+				.andExpect(jsonPath("$.sexo", is("Masculino")));
 	}
 
 	@Test
 	void medicoControllerAPIPOSTGETTest() throws Exception {
-		MvcResult result = 
-		mockMvc.perform(post("/api/v1/medicos")
-		.content("{\"nome\":\"Lucas\",\"crm\":\"123\"}")
-		.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(status().isCreated()).andReturn();
+		String jwtToken = getToken();
+
+		MvcResult result = mockMvc.perform(post("/api/v1/medicos")
+				.content("{\"nome\":\"Lucas\",\"crm\":\"123\"}")
+				.header("Authorization", "Bearer " + jwtToken)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated()).andReturn();
 
 		String resultStr = result.getResponse().getContentAsString();
 		JSONObject objJson = new JSONObject(resultStr);
 
-		mockMvc.perform(get("/api/v1/medicos/" + objJson.getString("id")))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.nome", is("Lucas")))
-		.andExpect(jsonPath("$.crm", is("123")));
+		mockMvc.perform(get("/api/v1/medicos/" + objJson.getString("id"))
+				.header("Authorization", "Bearer " + jwtToken))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.nome", is("Lucas")))
+				.andExpect(jsonPath("$.crm", is("123")));
 	}
 
 	@Test
 	void procedimentoAPIPOSTGETTest() throws Exception {
-		MvcResult result = 
-		mockMvc.perform(post("/api/v1/procedimentos")
-		.content("{\"descricao\":\"Cirurgia\"}")
-		.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(status().isCreated()).andReturn();
+		String jwtToken = getToken();
+
+		MvcResult result = mockMvc.perform(post("/api/v1/procedimentos")
+				.content("{\"descricao\":\"Cirurgia\"}")
+				.header("Authorization", "Bearer " + jwtToken)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated()).andReturn();
 
 		String resultStr = result.getResponse().getContentAsString();
 		JSONObject objJson = new JSONObject(resultStr);
 
-		mockMvc.perform(get("/api/v1/procedimentos/" + objJson.getString("id")))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.descricao", is("Cirurgia")));
-		
+		mockMvc.perform(get("/api/v1/procedimentos/" + objJson.getString("id"))
+				.header("Authorization", "Bearer " + jwtToken))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.descricao", is("Cirurgia")));
+
+	}
+
+	private String getToken() throws Exception {
+
+		MvcResult resultAuth = mockMvc.perform(post("/api/v1/auth/signin")
+				.content("{\"usuario\":\"admin\",\"senha\":\"admin\"}")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
+
+		String jwtToken = resultAuth.getResponse().getContentAsString();
+
+		return jwtToken;
 	}
 
 }
