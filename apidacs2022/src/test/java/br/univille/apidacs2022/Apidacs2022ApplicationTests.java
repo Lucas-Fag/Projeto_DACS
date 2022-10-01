@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import br.univille.apidacs2022.api.PacienteControllerAPI;
+import io.jsonwebtoken.lang.Assert;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,6 +32,7 @@ class Apidacs2022ApplicationTests {
 	private PacienteControllerAPI pacienteControllerAPI;
 	@Autowired
 	private MockMvc mockMvc;
+	private String jwtToken;
 
 	@Test
 	void preparacaoAmbienteTest() {
@@ -37,9 +40,21 @@ class Apidacs2022ApplicationTests {
 		assertThat(mockMvc).isNotNull();
 	}
 
+	private void geraToken() throws Exception {
+
+		MvcResult resultAuth = mockMvc.perform(post("/api/v1/auth/signin")
+				.content("{\"usuario\":\"admin\",\"senha\":\"admin\"}")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
+
+		jwtToken = resultAuth.getResponse().getContentAsString();
+	}
+
 	@Test
 	void pacienteControllerAPIPOSTGETTest() throws Exception {
-		String jwtToken = getToken();
+		if (jwtToken == null) {
+			geraToken();
+		}
 
 		MvcResult result = mockMvc.perform(post("/api/v1/pacientes")
 				.content("{\"nome\":\"Zezinho\",\"sexo\":\"Masculino\"}")
@@ -60,7 +75,9 @@ class Apidacs2022ApplicationTests {
 
 	@Test
 	void medicoControllerAPIPOSTGETTest() throws Exception {
-		String jwtToken = getToken();
+		if (jwtToken == null) {
+			geraToken();
+		}
 
 		MvcResult result = mockMvc.perform(post("/api/v1/medicos")
 				.content("{\"nome\":\"Lucas\",\"crm\":\"123\"}")
@@ -80,7 +97,9 @@ class Apidacs2022ApplicationTests {
 
 	@Test
 	void procedimentoAPIPOSTGETTest() throws Exception {
-		String jwtToken = getToken();
+		if (jwtToken == null) {
+			geraToken();
+		}
 
 		MvcResult result = mockMvc.perform(post("/api/v1/procedimentos")
 				.content("{\"descricao\":\"Cirurgia\"}")
@@ -98,33 +117,96 @@ class Apidacs2022ApplicationTests {
 
 	}
 
-	private String getToken() throws Exception {
-
-		MvcResult resultAuth = mockMvc.perform(post("/api/v1/auth/signin")
-				.content("{\"usuario\":\"admin\",\"senha\":\"admin\"}")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andReturn();
-
-		String jwtToken = resultAuth.getResponse().getContentAsString();
-
-		return jwtToken;
-	}
-
 	@Test
 	void cidadeAPIPOSTGETTest() throws Exception {
+		if (jwtToken == null) {
+			geraToken();
+		}
+
 		MvcResult result = 
 		mockMvc.perform(post("/api/v1/cidades")
 		.content("{\"nome\":\"Joinville\"}")
+		.header("Authorization", "Bearer " + jwtToken)
 		.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isCreated()).andReturn();
 
 		String resultStr = result.getResponse().getContentAsString();
 		JSONObject objJson = new JSONObject(resultStr);
 
-		mockMvc.perform(get("/api/v1/cidades/" + objJson.getString("id")))
+		mockMvc.perform(get("/api/v1/cidades/" + objJson.getString("id"))
+		.header("Authorization", "Bearer " + jwtToken))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.nome", is("Joinville")));
 		
 	}
+
+	@Test
+	void procedimentoRealizadoAPIPOSTGETTest() throws Exception {
+		String idProcedimento;
+		String json = "";
+		String descricaoProcedimentoRealizado = "Procedimento de teste";
+		String descricaoProcedimento = "Procedimento de teste";
+		String resultStr;
+		JSONObject objJson;
+		MvcResult result;
+
+		if (jwtToken == null) {
+			geraToken();
+		}
+
+		idProcedimento = criaProcedimento(descricaoProcedimento);
+		
+		json += "{ ";
+		json += " \"descricao\": \"" + descricaoProcedimentoRealizado + "\", ";
+		json += " \"valor\": \"999.99\", ";
+		json += " \"procedimento\": { ";
+		json +=                        " \"id\":\"" + idProcedimento + "\",";
+		json +=                        " \"descricao\":\"" + descricaoProcedimento + "\"";
+		json +=                   " } ";
+		json += "}";
+
+		System.out.println(json);
+
+		result = mockMvc.perform(post("/api/v1/procedimentos/realizados")
+		.content(json).header("Authorization", "Bearer " + jwtToken)
+		.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated()).andReturn();
+
+		resultStr = result.getResponse().getContentAsString();
+		objJson = new JSONObject(resultStr);
+
+		mockMvc.perform(get("/api/v1/procedimentos/realizados/" + objJson.getString("id"))
+		.header("Authorization", "Bearer " + jwtToken))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.descricao", is(descricaoProcedimentoRealizado)))
+		.andExpect(jsonPath("$.valor", is(999.99)));
+
+	}
+
+	private String criaProcedimento(String descricao) throws Exception {
+		String idProcedimento;
+
+		MvcResult result = mockMvc.perform(post("/api/v1/procedimentos")
+				.content("{\"descricao\":\"" + descricao + "\"}")
+				.header("Authorization", "Bearer " + jwtToken)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated()).andReturn();
+
+		String resultStr = result.getResponse().getContentAsString();
+		JSONObject objJson = new JSONObject(resultStr);
+		idProcedimento = objJson.getString("id");
+
+		mockMvc.perform(get("/api/v1/procedimentos/" + objJson.getString("id"))
+				.header("Authorization", "Bearer " + jwtToken))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.descricao", is(descricao)));
+
+
+		return idProcedimento;
+	}
+
+
+
+
 
 }
